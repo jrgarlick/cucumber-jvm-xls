@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>cucumber-jvm-xls</artifactId>
+  <properties>
+    <m2eclipse.wtp.contextRoot>/awaare-test</m2eclipse.wtp.contextRoot>
+    <m2e.jsf.activation>false</m2e.jsf.activation>
+    <m2e.jpa.activation>false</m2e.jpa.activation>
+    <m2e.jaxrs.activation>false</m2e.jaxrs.activation>
+  </properties>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>2.18.1</version>
+        <configuration>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>2.5</version>
+      </plugin>
+    </plugins>
+  </reporting>
+  <dependencies>
+    <dependency>
+      <groupId>info.cukes</groupId>
+      <artifactId>cucumber-java</artifactId>
+      <version>1.2.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>info.cukes</groupId>
+      <artifactId>cucumber-junit</artifactId>
+      <version>1.2.4</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <groupId>info.cukes</groupId>
+  <version>0.0.1-SNAPSHOT</version>
+  <description>Export Cucumber Results as an Excel Spreadsheet</description>
+</project>
