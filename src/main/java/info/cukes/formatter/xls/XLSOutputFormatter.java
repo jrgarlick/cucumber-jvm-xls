@@ -30,12 +30,12 @@ public class XLSOutputFormatter implements Reporter, Formatter {
 
     private static final int SCENARIO_COL = 0;
     private static final int STEP_COL = 1;
-    private static final int RESULT_COL = 2;
-    private static final int DURATION_COL = 3;
+    private static final int DURATION_COL = 2;
+    private static final int RESULT_COL = 3;
 
-    private String outputPath = "target/Cucumber-"+System.currentTimeMillis()+".xls";
+    private String outputPath = "target/Cucumber.xls";
 
-    private Workbook workbook;
+    private static Workbook workbook = new HSSFWorkbook();
     private Sheet worksheet;
     private Drawing drawing;
     private int currentRow = 1;
@@ -43,7 +43,6 @@ public class XLSOutputFormatter implements Reporter, Formatter {
 
     public XLSOutputFormatter() throws IOException {
         System.out.println("XLSOutputFormatter ----> CONSTRUCTOR");
-        workbook = new HSSFWorkbook();
     }
 
     @Override
@@ -60,7 +59,7 @@ public class XLSOutputFormatter implements Reporter, Formatter {
             workbook.write(out);
             workbook.close();
             out.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -88,11 +87,15 @@ public class XLSOutputFormatter implements Reporter, Formatter {
 
     @Override
     public void feature(Feature feature) {
-        System.out.println("XLSOutputFormatter ----> FEATURE: "+feature.getName());
-        worksheet = workbook.createSheet(feature.getName());
-        drawing = worksheet.createDrawingPatriarch();
-//        worksheet.setName(feature.getName());
-        currentRow = 1;
+        try {
+            System.out.println("XLSOutputFormatter ----> FEATURE: "+feature.getName());
+            worksheet = workbook.createSheet(feature.getName());
+            drawing = worksheet.createDrawingPatriarch();
+    //        worksheet.setName(feature.getName());
+            currentRow = 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -150,16 +153,19 @@ public class XLSOutputFormatter implements Reporter, Formatter {
 
     @Override
     public void result(Result result) {
-        System.out.println("XLSOutputFormatter ----> RESULT: "+result.getStatus()+" : "+result.getErrorMessage());
-        addCell(resultsRow, RESULT_COL, result.getStatus(), result.getErrorMessage());
+        try {
+            System.out.println("XLSOutputFormatter ----> RESULT: "+result.getStatus()+" : "+result.getErrorMessage());
+            addCell(resultsRow, RESULT_COL, result.getStatus(), result.getErrorMessage());
 
-        DecimalFormat format = new DecimalFormat("#,##0.###");
-        addCell(resultsRow, DURATION_COL, format.format((result.getDuration() / 1000000000d))+"s");
+            DecimalFormat format = new DecimalFormat("#,##0.###");
+            if (result.getDuration() != null) {
+                addCell(resultsRow, DURATION_COL, format.format((result.getDuration() / 1000000000d))+"s");
+            }
 
-//        if (result.getErrorMessage() != null) {
-//            addCell(resultsRow, ERROR_COL, result.getErrorMessage());
-//        }
-        resultsRow++;
+            resultsRow++;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -173,22 +179,26 @@ public class XLSOutputFormatter implements Reporter, Formatter {
     }
 
     private void addCell(int rownum, int colnum, String value, String commentText) {
-        Row row = worksheet.getRow(rownum);
-        if (row == null) {
-            row = worksheet.createRow(rownum);
-        }
-        Cell cell = row.getCell(colnum);
-        if (cell == null) {
-            cell = row.createCell(colnum);
-        }
+        try {
+            Row row = worksheet.getRow(rownum);
+            if (row == null) {
+                row = worksheet.createRow(rownum);
+            }
+            Cell cell = row.getCell(colnum);
+            if (cell == null) {
+                cell = row.createCell(colnum);
+            }
 
-        cell.setCellValue(value);
-        if (commentText != null) {
-            HSSFClientAnchor anchor = new HSSFClientAnchor(100, 100, 100, 100, (short)1, 1, (short) 6, 5);
-            Comment comment = drawing.createCellComment(anchor);
-            comment.setString(workbook.getCreationHelper().createRichTextString(commentText));
-            comment.setAuthor("Cucumber-XLS");
-            cell.setCellComment(comment);
+            cell.setCellValue(value);
+            if (commentText != null) {
+                HSSFClientAnchor anchor = new HSSFClientAnchor(100, 100, 100, 100, (short)1, 1, (short) 6, 5);
+                Comment comment = drawing.createCellComment(anchor);
+                comment.setString(workbook.getCreationHelper().createRichTextString(commentText));
+                comment.setAuthor("Cucumber-XLS");
+                cell.setCellComment(comment);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
