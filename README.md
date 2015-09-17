@@ -18,6 +18,6 @@ public class SomeTest {
 
 ## Output
 
-The formatter will then create an XLS file located in your project's `target/` directory called Cucumber.xls.
+The formatter will then create an XLS file located in your project's `target/` directory called 'Cucumber-XLS.xls'.
 
 Easy, eh?
