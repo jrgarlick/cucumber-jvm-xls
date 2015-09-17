@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.poi.hssf.usermodel.HSSFOptimiser;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -24,6 +25,9 @@ public class WorkbookSession {
     }
 
     public void save(String outputPath) throws IOException {
+        HSSFOptimiser.optimiseCellStyles((HSSFWorkbook) workbook);
+        HSSFOptimiser.optimiseFonts((HSSFWorkbook) workbook);
+
         File outputFile = new File(outputPath);
         FileOutputStream out = new FileOutputStream(outputFile);
         workbook.write(out);

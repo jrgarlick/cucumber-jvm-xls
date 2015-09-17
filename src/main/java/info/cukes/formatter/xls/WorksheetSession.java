@@ -1,6 +1,7 @@
 package info.cukes.formatter.xls;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
@@ -42,6 +43,11 @@ public class WorksheetSession {
 
     protected Row setRow(int rowNum, Object ... cells) {
         return null;
+    }
+
+    protected Cell getCell(int rownum, int colnum) {
+        Row row = getRow(rownum);
+        return getCell(row, colnum);
     }
 
     protected Cell getCell(Row row, int colnum) {
@@ -91,6 +97,13 @@ public class WorksheetSession {
             cell.setCellStyle(style);
         }
     }
+
+    protected void formatCells(List<Cell> cells, String formatIdentifier) {
+        for (Cell cell : cells) {
+            formatCell(cell, formatIdentifier);
+        }
+    }
+
 
 
 }

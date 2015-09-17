@@ -3,7 +3,7 @@ package info.cukes.formatter.xls;
 public class ScenarioStat {
 
     private String name;
-    private int tests = 0;
+    private int steps = 0;
     private int errors = 0;
     private int failures = 0;
     private int skipped = 0;
@@ -17,15 +17,15 @@ public class ScenarioStat {
         return this.name;
     }
 
-    public void incrementTests() {
-        tests++;
+    public void incrementSteps() {
+        steps++;
     }
 
-    public int getTests() {
-        return tests;
+    public int getSteps() {
+        return steps;
     }
-    public void setTests(int tests) {
-        this.tests = tests;
+    public void setSteps(int tests) {
+        this.steps = tests;
     }
 
     public void incrementErrors() {
@@ -80,7 +80,7 @@ public class ScenarioStat {
 
     public ScenarioStat add(ScenarioStat that) {
         ScenarioStat newStat = new ScenarioStat();
-        newStat.tests = this.tests + that.tests;
+        newStat.steps = this.steps + that.steps;
         newStat.errors = this.errors + that.errors;
         newStat.failures = this.failures + that.failures;
         newStat.skipped = this.skipped + that.skipped;

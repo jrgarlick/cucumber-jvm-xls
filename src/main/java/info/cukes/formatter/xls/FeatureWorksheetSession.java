@@ -20,7 +20,6 @@ public class FeatureWorksheetSession extends WorksheetSession {
 
     private static final int STARTING_SCENARIO_ROW = 3;
 
-    private static final String PASSED = Result.PASSED;
     private static final String FAILED = Result.FAILED;
     private static final String SKIPPED = "skipped"; // Result doesn't define it?
 
@@ -39,19 +38,21 @@ public class FeatureWorksheetSession extends WorksheetSession {
 
     public void setTitleAndHeader() {
         Cell titleCell = setCell(currentRow++, SCENARIO_COL, "Feature: "+feature.getName());
-        formatCell(titleCell, CucumberWorkbookSession.STYLE_H1);
+        formatCell(titleCell, CucumberWorkbookSession.STYLE_H2);
 
         Cell resultHeaderCell = setCell(currentRow, RESULT_COL, "Outcome");
         Cell timingHeaderCell = setCell(currentRow, DURATION_COL, "Timing");
-        formatCell(resultHeaderCell, CucumberWorkbookSession.STYLE_H3);
-        formatCell(timingHeaderCell, CucumberWorkbookSession.STYLE_H3);
+        formatCell(resultHeaderCell, CucumberWorkbookSession.STYLE_H3_CENTERED);
+        formatCell(timingHeaderCell, CucumberWorkbookSession.STYLE_H3_CENTERED);
 
         currentRow = STARTING_SCENARIO_ROW;
     }
 
 
     public void startOfScenario(Scenario scenario) {
-        setCell(currentRow++, SCENARIO_COL, scenario.getName());
+        Cell scenarioCell = setCell(currentRow++, SCENARIO_COL, scenario.getName());
+        formatCell(scenarioCell, CucumberWorkbookSession.STYLE_H3);
+
         resultsRow = currentRow;
         currentScenarioStat = new ScenarioStat();
         currentScenarioStat.setName(scenario.getName());
@@ -61,7 +62,7 @@ public class FeatureWorksheetSession extends WorksheetSession {
 
     public void addStep(Step step) {
         setCell(currentRow++, STEP_COL, step.getKeyword()+step.getName());
-        currentScenarioStat.incrementTests();
+        currentScenarioStat.incrementSteps();
     }
 
     public void addResult(Result result) {
@@ -76,21 +77,22 @@ public class FeatureWorksheetSession extends WorksheetSession {
         DecimalFormat format = new DecimalFormat("#,##0.###");
         if (result.getDuration() != null) {
             Cell timingCell = setCell(resultsRow, DURATION_COL, format.format((result.getDuration() / 1000000000d))+"s");
+            formatCell(timingCell, CucumberWorkbookSession.STYLE_CENTERED);
             currentScenarioStat.addRunTime(result.getDuration());
         }
 
         // Format the result cell and Increment the outcome counters
         switch (resultStatus) {
         case FAILED :
-            this.formatCell(resultCell, CucumberWorkbookSession.STYLE_FAILED);
+            formatCell(resultCell, CucumberWorkbookSession.STYLE_FAILED);
             currentScenarioStat.incrementFailures();
             break;
         case SKIPPED :
-            this.formatCell(resultCell, CucumberWorkbookSession.STYLE_SKIPPED);
+            formatCell(resultCell, CucumberWorkbookSession.STYLE_SKIPPED);
             currentScenarioStat.incrementSkipped();
             break;
         default:
-            this.formatCell(resultCell, CucumberWorkbookSession.STYLE_PASSED);
+            formatCell(resultCell, CucumberWorkbookSession.STYLE_PASSED);
             break;
         }
 
