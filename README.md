@@ -11,9 +11,13 @@ It's easy to add the XLS output to your cucumber project. All you have to do is 
 ```
 ...
 @RunWith(Cucumber.class)
-@CucumberOptions(
-        plugin = {"info.cukes.formatter.xls.XLSOutputFormatter"})
+@CucumberOptions(plugin = {"info.cukes.formatter.xls.XLSOutputFormatter"})
 public class SomeTest {  
 ...
 ```
 
+## Output
+
+The formatter will then create an XLS file located in your project's `target/` directory called Cucumber.xls.
+
+Easy, eh?
