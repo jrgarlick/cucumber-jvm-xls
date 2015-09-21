@@ -21,7 +21,8 @@ public class SummaryWorksheetSession extends WorksheetSession {
     private static final int SUMMARY_LABEL_COL = 1;
     private static final int SUMMARY_VALUE_COL = 2;
 
-    private static final int FIRST_FEATURE_RESULT_ROW = 14;
+    private static final int FEATURE_HEADING_ROW = 13;
+    private static final int FIRST_FEATURE_RESULT_ROW = 15;
     private static final int FIRST_SCENARIO_STAT_COL = 5;
 
 
@@ -38,7 +39,7 @@ public class SummaryWorksheetSession extends WorksheetSession {
 
     public void setTitleAndHeader() {
         setCell(currentRow, FEATURE_COL, null);
-        Cell titleCell = setCell(currentRow++, FEATURE_COL, "Test Execution Results Summary");
+        Cell titleCell = setCell(currentRow++, FEATURE_COL, "Test Execution Results");
         formatCell(titleCell, CucumberWorkbookSession.STYLE_H1);
     }
 
@@ -71,11 +72,13 @@ public class SummaryWorksheetSession extends WorksheetSession {
             totalFeatures++;
         }
 
+        formatCell(setCell(FEATURE_HEADING_ROW, 0, "Feature Results"), CucumberWorkbookSession.STYLE_H2);
+
         // Summary Section
         currentRow = SUMMARY_START_ROW;
         String[] headers = new String[]{
             "Start Date/Time", "End Date/Time", "Total Features", "Total Scenarios",
-            "Total Steps", "Total Failures", "Total Skipped", "Total Run Time"};
+            "Total Steps", "Total Passed", "Total Failures", "Total Skipped", "Total Run Time"};
 
         for (String label : headers) {
             formatCell(setCell(currentRow++, SUMMARY_LABEL_COL, label),
@@ -93,6 +96,7 @@ public class SummaryWorksheetSession extends WorksheetSession {
         summaryCells.add(setCell(currentRow++, SUMMARY_VALUE_COL, totalFeatures));
         summaryCells.add(setCell(currentRow++, SUMMARY_VALUE_COL, totalScenarios));
         summaryCells.add(setCell(currentRow++, SUMMARY_VALUE_COL, totalStats.getSteps()));
+        summaryCells.add(setCell(currentRow++, SUMMARY_VALUE_COL, totalStats.getPassed()));
         summaryCells.add(setCell(currentRow++, SUMMARY_VALUE_COL, totalStats.getFailures()));
         summaryCells.add(setCell(currentRow++, SUMMARY_VALUE_COL, totalStats.getSkipped()));
         summaryCells.add(setCell(currentRow++, SUMMARY_VALUE_COL, format.format((totalStats.getRunTime() / 1000000000d))+"s"));
@@ -110,7 +114,11 @@ public class SummaryWorksheetSession extends WorksheetSession {
     private void writeFeatureStatHeading(int rownum) {
         int statCol = FIRST_SCENARIO_STAT_COL;
 
+        formatCell(setCell(rownum, statCol++, "Result"),
+                CucumberWorkbookSession.STYLE_H3_CENTERED);
         formatCell(setCell(rownum, statCol++, "# Steps"),
+                CucumberWorkbookSession.STYLE_H3_CENTERED);
+        formatCell(setCell(rownum, statCol++, "# Passed"),
                 CucumberWorkbookSession.STYLE_H3_CENTERED);
         formatCell(setCell(rownum, statCol++, "# Failures"),
                 CucumberWorkbookSession.STYLE_H3_CENTERED);
@@ -125,7 +133,16 @@ public class SummaryWorksheetSession extends WorksheetSession {
 
         DecimalFormat format = new DecimalFormat("#,##0.###");
 
+        Cell resultCell = setCell(rownum, statCol++, s.getResult());
+        if (FeatureWorksheetSession.PASSED.equals(s.getResult())) {
+            formatCell(resultCell, CucumberWorkbookSession.STYLE_PASSED);
+        } else {
+            formatCell(resultCell, CucumberWorkbookSession.STYLE_FAILED);
+        }
+
         formatCell(setCell(rownum, statCol++, s.getSteps()),
+                CucumberWorkbookSession.STYLE_CENTERED);
+        formatCell(setCell(rownum, statCol++, s.getPassed()),
                 CucumberWorkbookSession.STYLE_CENTERED);
         formatCell(setCell(rownum, statCol++, s.getFailures()),
                 CucumberWorkbookSession.STYLE_CENTERED);

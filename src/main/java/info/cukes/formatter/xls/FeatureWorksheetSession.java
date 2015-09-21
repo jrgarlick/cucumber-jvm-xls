@@ -20,8 +20,9 @@ public class FeatureWorksheetSession extends WorksheetSession {
 
     private static final int STARTING_SCENARIO_ROW = 3;
 
-    private static final String FAILED = Result.FAILED;
-    private static final String SKIPPED = "skipped"; // Result doesn't define it?
+    public static final String PASSED = "passed";
+    public static final String FAILED = Result.FAILED;
+    public static final String SKIPPED = "skipped"; // Result doesn't define it?
 
     private Feature feature;
     private List<ScenarioStat> stats = new ArrayList<ScenarioStat>();
@@ -86,6 +87,7 @@ public class FeatureWorksheetSession extends WorksheetSession {
         case FAILED :
             formatCell(resultCell, CucumberWorkbookSession.STYLE_FAILED);
             currentScenarioStat.incrementFailures();
+            currentScenarioStat.setResult(FAILED);
             break;
         case SKIPPED :
             formatCell(resultCell, CucumberWorkbookSession.STYLE_SKIPPED);
@@ -93,6 +95,7 @@ public class FeatureWorksheetSession extends WorksheetSession {
             break;
         default:
             formatCell(resultCell, CucumberWorkbookSession.STYLE_PASSED);
+            currentScenarioStat.incrementPassed();
             break;
         }
 
