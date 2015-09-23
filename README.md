@@ -6,7 +6,19 @@ The Cucumber XLS output formatter provides a simple report after your testing re
 
 ## Configuration
 
-It's easy to add the XLS output to your cucumber project. All you have to do is to download and install the cucumber-jvm-xls JAR file, and include the current POM into your Maven project. Then, either provide a Cucumber.options plugin command line option to reference the `info.cukes.formatter.xls.XLSOutputFormatter`, or specify it in your Test class like this:
+It's easy to add the XLS output to your cucumber project. All you have to do is to download and install the cucumber-jvm-xls JAR file into your repo, and add the dependency to your Maven project. 
+
+```
+...
+    <dependency>
+      <groupId>info.cukes</groupId>
+      <artifactId>cucumber-jvm-xls</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+...
+```
+
+Then, either provide a Cucumber.options plugin command line option to reference the `info.cukes.formatter.xls.XLSOutputFormatter`, or specify it in your Test class like this:
 
 ```
 ...
