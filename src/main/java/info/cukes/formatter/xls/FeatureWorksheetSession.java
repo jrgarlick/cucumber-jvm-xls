@@ -33,6 +33,8 @@ public class FeatureWorksheetSession extends WorksheetSession {
     public FeatureWorksheetSession(WorkbookSession workbookSession, Feature feature) {
         super(workbookSession, feature.getName());
         this.feature = feature;
+        currentScenarioStat = new ScenarioStat();
+        
         worksheet.setColumnWidth(SCENARIO_COL, 1000);
         worksheet.setColumnWidth(STEP_COL, 15000);
     }
@@ -55,7 +57,6 @@ public class FeatureWorksheetSession extends WorksheetSession {
         formatCell(scenarioCell, CucumberWorkbookSession.STYLE_H3);
 
         resultsRow = currentRow;
-        currentScenarioStat = new ScenarioStat();
         currentScenarioStat.setName(scenario.getName());
         stats.add(currentScenarioStat);
     }
