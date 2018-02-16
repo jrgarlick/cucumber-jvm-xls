@@ -32,13 +32,13 @@ public class SummaryWorksheetSession extends WorksheetSession {
 
     public SummaryWorksheetSession(WorkbookSession workbookSession) {
         super(workbookSession, "Summary");
-        startTime = new Date();;
+        startTime = new Date();
         worksheet.setColumnWidth(FEATURE_COL, 1000);
         worksheet.setColumnWidth(SCENARIO_COL, 5000);
     }
 
     public void setTitleAndHeader() {
-        setCell(currentRow, FEATURE_COL, null);
+        setCellEmpty(currentRow, FEATURE_COL);
         Cell titleCell = setCell(currentRow++, FEATURE_COL, "Test Execution Results");
         formatCell(titleCell, CucumberWorkbookSession.STYLE_H1);
     }
@@ -57,7 +57,7 @@ public class SummaryWorksheetSession extends WorksheetSession {
         for (Feature f : featureStats.keySet()) {
             Cell featureCell = setCell(currentRow, FEATURE_COL, f.getName());
             formatCell(featureCell, CucumberWorkbookSession.STYLE_H3);
-            writeFeatureStatTotals(currentRow, addAllStats(featureStats.get(f)));
+            writeFeatureStatTotals(currentRow, addUpAllStats(featureStats.get(f)));
 
             currentRow++;
 
@@ -103,7 +103,7 @@ public class SummaryWorksheetSession extends WorksheetSession {
         formatCells(summaryCells, CucumberWorkbookSession.STYLE_ALIGN_LEFT);
     }
 
-    private ScenarioStat addAllStats(List<ScenarioStat> stats) {
+    private ScenarioStat addUpAllStats(List<ScenarioStat> stats) {
         ScenarioStat total = new ScenarioStat();
         for (ScenarioStat s : stats) {
             total = total.add(s);

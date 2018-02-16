@@ -129,8 +129,6 @@ public class CucumberWorkbookSession extends WorkbookSession {
         CellStyle alignLeft = workbook.createCellStyle();
         alignLeft.setAlignment(CellStyle.ALIGN_LEFT);
         addCellStyle(STYLE_ALIGN_LEFT, alignLeft);
-
-
     }
 
 }

@@ -1,11 +1,12 @@
 package info.cukes.formatter.xls;
 
+import java.io.IOException;
+
+import gherkin.formatter.model.Background;
 import gherkin.formatter.model.Feature;
 import gherkin.formatter.model.Result;
 import gherkin.formatter.model.Scenario;
 import gherkin.formatter.model.Step;
-
-import java.io.IOException;
 
 public class XLSOutputFormatter extends BareReporterFormatter {
 
@@ -22,6 +23,15 @@ public class XLSOutputFormatter extends BareReporterFormatter {
     public void feature(Feature feature) {
         try {
             featureSession = workbookSession.beginNewFeature(feature);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void background(Background bg) {
+        try {
+            featureSession.startOfBackground(bg);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,4 +80,5 @@ public class XLSOutputFormatter extends BareReporterFormatter {
             e.printStackTrace();
         }
     }
+    
 }
